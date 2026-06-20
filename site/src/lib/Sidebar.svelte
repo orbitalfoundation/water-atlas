@@ -34,5 +34,9 @@
     <button class="about" onclick={onAbout}>About</button>
     <button class="about" onclick={onFaq}>FAQ</button>
   </div>
-  <footer>Public APIs: USGS · CDEC · eWRIMS</footer>
+  <footer>
+    Public APIs: USGS · CDEC · eWRIMS<br />
+    <a href="https://github.com/orbitalfoundation/water-atlas" target="_blank" rel="noopener">Source</a> ·
+    <a href="https://open-cubed.exe.xyz/" target="_blank" rel="noopener">Open-Cubed</a>
+  </footer>
 </aside>

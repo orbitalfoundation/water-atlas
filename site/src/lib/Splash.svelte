@@ -27,6 +27,25 @@
       <div><strong>100%</strong><span>open, reproducible data</span></div>
     </div>
 
+    <!-- ── paper water vs wet water ── -->
+    <div class="gap">
+      <p class="gap-head">Paper water vs. wet water</p>
+      <div class="bar">
+        <span class="bar-label">On paper — water rights granted</span>
+        <div class="track"><div class="fill paper" style="width:100%"></div><em>~370M acre-ft / yr</em></div>
+      </div>
+      <div class="bar">
+        <span class="bar-label">In the rivers — average yearly flow</span>
+        <div class="track"><div class="fill wet" style="width:19%"></div><em>~70M acre-ft / yr</em></div>
+      </div>
+      <p class="gap-note">
+        California has promised on paper roughly <strong>five times</strong> the water its rivers
+        actually carry in an average year. That gap — not scarcity alone — is the story this map
+        tries to make legible.
+        <a href="https://iopscience.iop.org/article/10.1088/1748-9326/9/8/084012" target="_blank" rel="noopener">Grantham &amp; Viers, 2014</a>.
+      </p>
+    </div>
+
     <p class="why">
       A decade ago, the
       <a href="https://longnow.org/ideas/the-new-california-water-atlas/" target="_blank" rel="noopener">
@@ -41,6 +60,11 @@
       Open data from USGS, California DWR (CDEC) &amp; the State Water Board (eWRIMS). ·
       <!-- svelte-ignore a11y_invalid_attribute -->
       <a href="#faq" onclick={(e) => { e.preventDefault(); onFaq?.(); }}>Read the FAQ</a>
+    </p>
+    <p class="credit links">
+      <a href="https://github.com/orbitalfoundation/water-atlas" target="_blank" rel="noopener">Source on GitHub</a> ·
+      part of <a href="https://open-cubed.exe.xyz/" target="_blank" rel="noopener">Open-Cubed</a> ·
+      builds on the <a href="https://github.com/NewCaliforniaWaterAtlas" target="_blank" rel="noopener">New California Water Atlas</a> archive
     </p>
   </div>
 </div>

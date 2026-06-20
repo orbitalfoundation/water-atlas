@@ -69,11 +69,18 @@
     <details>
       <summary>What's the big idea — "paper water vs wet water"?</summary>
       <p>
-        California has granted water rights totaling roughly <strong>five times</strong> the water
-        its rivers actually carry in an average year. Rights are a list; rights placed next to actual
-        flow are a story. The atlas's job is to make that gap visible: where water comes from (snow,
-        rain) → where it's stored (reservoirs) → who's allowed to take it (rights) → what's actually
-        left for the river and the aquifer.
+        California has granted water rights totaling roughly <strong>370 million acre-feet</strong>
+        per year — about <strong>five times</strong> the <strong>~70 million acre-feet</strong> its
+        rivers actually carry in an average year
+        (<a href="https://iopscience.iop.org/article/10.1088/1748-9326/9/8/084012" target="_blank" rel="noopener">Grantham &amp; Viers, 2014</a>).
+        The original New California Water Atlas made the same point with its own numbers — ~250M
+        acre-feet claimed against ~71M available. Either way the lesson holds: rights are a list;
+        rights placed next to actual flow are a story.
+      </p>
+      <p>
+        The atlas's job is to make that gap visible: where water comes from (snow, rain) → where
+        it's stored (reservoirs) → who's allowed to take it (rights) → what's actually left for the
+        river and the aquifer. (An acre-foot is roughly a football field flooded a foot deep.)
       </p>
     </details>
 
@@ -212,7 +219,31 @@
       </p>
     </details>
 
+    <!-- ───────────────────────── LINKS ───────────────────────── -->
+    <h2>Links &amp; source</h2>
+
+    <details>
+      <summary>Where's the code, and what's it part of?</summary>
+      <p>
+        The full source — collector, exporter, and this site — lives at
+        <a href="https://github.com/orbitalfoundation/water-atlas" target="_blank" rel="noopener">github.com/orbitalfoundation/water-atlas</a>.
+        Clone it and a few commands rebuild the whole atlas from public data. It's part of
+        <a href="https://open-cubed.exe.xyz/" target="_blank" rel="noopener">Open-Cubed</a>, an
+        initiative for small, open, durable civic tools.
+      </p>
+      <p>
+        It stands on the shoulders of the original
+        <a href="https://github.com/NewCaliforniaWaterAtlas" target="_blank" rel="noopener">New California Water Atlas</a>,
+        whose code and data — though the live site went dark — remain on GitHub. Their water-rights
+        field dictionary and framing directly informed this rebuild.
+      </p>
+    </details>
+
     <button class="done" onclick={onClose}>Back to the map →</button>
-    <p class="credit">Open data from USGS, California DWR (CDEC) &amp; the State Water Board (eWRIMS).</p>
+    <p class="credit">
+      Open data from USGS, California DWR (CDEC) &amp; the State Water Board (eWRIMS). ·
+      <a href="https://github.com/orbitalfoundation/water-atlas" target="_blank" rel="noopener">Source</a> ·
+      <a href="https://open-cubed.exe.xyz/" target="_blank" rel="noopener">Open-Cubed</a>
+    </p>
   </div>
 </div>

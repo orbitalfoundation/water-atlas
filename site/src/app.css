@@ -44,7 +44,9 @@ html, body, #app { height: 100%; margin: 0; }
   color: var(--accent); font-weight: 600; font-size: 0.82rem;
 }
 .panel .about:hover { background: #e6eff4; }
-.panel footer { margin-top: 0.8rem; color: var(--muted); font-size: 0.72rem; text-align: center; }
+.panel footer { margin-top: 0.8rem; color: var(--muted); font-size: 0.72rem; text-align: center; line-height: 1.5; }
+.panel footer a { color: var(--accent); text-decoration: none; }
+.panel footer a:hover { text-decoration: underline; }
 
 /* ---- splash ---- */
 .splash-backdrop {
@@ -70,6 +72,26 @@ html, body, #app { height: 100%; margin: 0; }
 .stats strong { display: block; font-size: 1.5rem; color: var(--accent); letter-spacing: -0.02em; }
 .stats span { font-size: 0.72rem; color: var(--muted); line-height: 1.25; display: block; margin-top: 0.25rem; }
 
+.gap { margin: 1.2rem 0 0.4rem; }
+.gap-head {
+  font-size: 0.74rem !important; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--accent); font-weight: 700; margin: 0 0 0.6rem !important;
+}
+.gap .bar { margin: 0 0 0.5rem; }
+.gap .bar-label { font-size: 0.78rem; color: var(--muted); display: block; margin-bottom: 0.2rem; }
+.gap .track {
+  position: relative; background: #f1f6f9; border-radius: 6px;
+  height: 1.4rem; display: flex; align-items: center;
+}
+.gap .fill { height: 100%; border-radius: 6px; }
+.gap .fill.paper { background: #d9602a; }
+.gap .fill.wet { background: #08519c; }
+.gap .track em {
+  position: absolute; right: 0.5rem; font-style: normal;
+  font-size: 0.72rem; font-weight: 600; color: #344853;
+}
+.gap-note { font-size: 0.82rem !important; color: #344853 !important; margin: 0.5rem 0 0 !important; }
+
 .splash button {
   margin-top: 0.6rem; padding: 0.7rem 1.3rem; cursor: pointer;
   background: var(--accent); color: #fff; border: 0; border-radius: 9px;
@@ -77,6 +99,7 @@ html, body, #app { height: 100%; margin: 0; }
 }
 .splash button:hover { background: #095e8b; }
 .splash .credit { font-size: 0.72rem; color: var(--muted); margin-top: 0.9rem; }
+.splash .credit.links { margin-top: 0.4rem; }
 
 /* ---- faq ---- */
 .faq-backdrop {
