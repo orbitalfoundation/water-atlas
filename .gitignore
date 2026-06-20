@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# local database + raw response cache (regenerate via `npm run aggregate`)
+data/*.db
+data/*.db-shm
+data/*.db-wal
+data/cache/
+
+# generated map layers + manifest (regenerate via `npm run export`)
+site/static/data/
+
+# svelte / vite build output
+site/.svelte-kit/
+site/build/
+site/dist/
+
+# misc
+.DS_Store
+*.log
+npm-debug.log*
+
+# exe.dev API token (secret)
+deploy/.api-token

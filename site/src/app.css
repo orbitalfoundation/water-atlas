@@ -1,0 +1,149 @@
+:root {
+  --ink: #10212b;
+  --muted: #5b6b75;
+  --panel: rgba(255, 255, 255, 0.95);
+  --accent: #0b6fa4;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--ink);
+}
+
+* { box-sizing: border-box; }
+html, body, #app { height: 100%; margin: 0; }
+.app, .map { position: absolute; inset: 0; }
+
+/* ---- sidebar ---- */
+.panel {
+  position: absolute;
+  top: 1rem; right: 1rem; z-index: 5;
+  width: 290px; max-width: calc(100vw - 2rem);
+  background: var(--panel);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(16, 33, 43, 0.18);
+  padding: 1rem 1.1rem;
+}
+.panel header h1 { margin: 0; font-size: 1.25rem; letter-spacing: -0.01em; }
+.panel .sub { margin: 0.1rem 0 0.8rem; color: var(--muted); font-size: 0.8rem; }
+.panel .loading { color: var(--muted); font-size: 0.85rem; }
+
+.layers { list-style: none; margin: 0; padding: 0; }
+.layers li {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 0.5rem; padding: 0.35rem 0; border-top: 1px solid #eef1f3;
+}
+.layers label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.86rem; }
+.layers .swatch { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.2); flex: none; }
+.layers .title { line-height: 1.15; }
+.layers .count { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.75rem; flex: none; }
+
+.legend { color: var(--muted); font-size: 0.76rem; line-height: 1.4; margin: 0.7rem 0 0.4rem; }
+.panel .actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+.panel .about {
+  flex: 1; padding: 0.5rem; cursor: pointer;
+  background: #f1f6f9; border: 1px solid #dde7ec; border-radius: 8px;
+  color: var(--accent); font-weight: 600; font-size: 0.82rem;
+}
+.panel .about:hover { background: #e6eff4; }
+.panel footer { margin-top: 0.8rem; color: var(--muted); font-size: 0.72rem; text-align: center; }
+
+/* ---- splash ---- */
+.splash-backdrop {
+  position: absolute; inset: 0; z-index: 20;
+  background: rgba(8, 25, 35, 0.55);
+  backdrop-filter: blur(3px);
+  display: grid; place-items: center; padding: 1.5rem;
+}
+.splash {
+  max-width: 540px; background: #fff; border-radius: 16px;
+  padding: 2rem 2.2rem; box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+  animation: rise 0.25s ease-out;
+}
+@keyframes rise { from { transform: translateY(12px); opacity: 0; } to { transform: none; opacity: 1; } }
+.splash h1 { margin: 0 0 0.4rem; font-size: 1.9rem; letter-spacing: -0.02em; }
+.splash .lede { font-size: 1.05rem; color: var(--ink); margin: 0 0 1rem; }
+.splash p { color: #344853; line-height: 1.5; font-size: 0.94rem; }
+.splash .why { font-size: 0.86rem; color: var(--muted); }
+.splash a { color: var(--accent); }
+
+.stats { display: flex; gap: 1rem; margin: 1.2rem 0; }
+.stats div { flex: 1; background: #f1f6f9; border-radius: 10px; padding: 0.8rem; text-align: center; }
+.stats strong { display: block; font-size: 1.5rem; color: var(--accent); letter-spacing: -0.02em; }
+.stats span { font-size: 0.72rem; color: var(--muted); line-height: 1.25; display: block; margin-top: 0.25rem; }
+
+.splash button {
+  margin-top: 0.6rem; padding: 0.7rem 1.3rem; cursor: pointer;
+  background: var(--accent); color: #fff; border: 0; border-radius: 9px;
+  font-size: 0.95rem; font-weight: 600;
+}
+.splash button:hover { background: #095e8b; }
+.splash .credit { font-size: 0.72rem; color: var(--muted); margin-top: 0.9rem; }
+
+/* ---- faq ---- */
+.faq-backdrop {
+  position: absolute; inset: 0; z-index: 25;
+  background: rgba(8, 25, 35, 0.55);
+  backdrop-filter: blur(3px);
+  display: grid; place-items: start center; padding: 1.5rem;
+  overflow-y: auto;
+}
+.faq {
+  position: relative;
+  max-width: 600px; width: 100%;
+  background: #fff; border-radius: 16px;
+  padding: 2rem 2.2rem 1.6rem;
+  box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+  animation: rise 0.25s ease-out;
+  margin: auto;
+}
+.faq .x {
+  position: absolute; top: 0.8rem; right: 1rem;
+  background: none; border: 0; cursor: pointer;
+  font-size: 1.6rem; line-height: 1; color: var(--muted);
+}
+.faq .x:hover { color: var(--ink); }
+.faq h1 { margin: 0 0 0.4rem; font-size: 1.7rem; letter-spacing: -0.02em; }
+.faq .lede { font-size: 1rem; color: #344853; margin: 0 0 1rem; line-height: 1.5; }
+.faq h2 {
+  margin: 1.6rem 0 0.4rem; font-size: 0.78rem; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--accent); font-weight: 700;
+  border-top: 1px solid #eef1f3; padding-top: 1rem;
+}
+.faq details {
+  border-bottom: 1px solid #eef1f3;
+}
+.faq summary {
+  cursor: pointer; padding: 0.6rem 0; font-weight: 600;
+  font-size: 0.92rem; color: var(--ink); list-style: none;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::before {
+  content: "+"; color: var(--accent); font-weight: 700;
+  width: 1ch; flex: none; font-size: 1.05rem;
+}
+.faq details[open] summary::before { content: "−"; }
+.faq summary:hover { color: var(--accent); }
+.faq details p {
+  margin: 0 0 0.8rem 1.5ch; color: #344853; line-height: 1.55; font-size: 0.9rem;
+}
+.faq a { color: var(--accent); }
+.faq code {
+  background: #f1f6f9; padding: 0.05rem 0.3rem; border-radius: 4px;
+  font-size: 0.85em;
+}
+.faq .done {
+  margin-top: 1.2rem; padding: 0.7rem 1.3rem; cursor: pointer;
+  background: var(--accent); color: #fff; border: 0; border-radius: 9px;
+  font-size: 0.95rem; font-weight: 600;
+}
+.faq .done:hover { background: #095e8b; }
+.faq .credit { font-size: 0.72rem; color: var(--muted); margin-top: 0.9rem; }
+
+/* ---- popups ---- */
+.maplibregl-popup-content { border-radius: 10px; padding: 0.7rem 0.85rem; }
+.pop h3 { margin: 0 0 0.3rem; font-size: 0.92rem; }
+.pop-big { font-size: 1.25rem; font-weight: 700; color: var(--accent); margin-bottom: 0.3rem; }
+.pop table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.pop td { padding: 0.1rem 0; vertical-align: top; }
+.pop td:first-child { color: var(--muted); padding-right: 0.8rem; white-space: nowrap; }
+.pop small { display: block; margin-top: 0.4rem; color: var(--muted); font-size: 0.7rem; }

@@ -1,0 +1,28 @@
+# Water Atlas — production web server.
+# Runs inside a Caddy container on the exe.dev VM. exe.dev terminates TLS at its
+# proxy, so we serve plain HTTP on :80 (container) -> :8080 (host = proxy port).
+
+{
+	admin off
+	auto_https off
+}
+
+:80 {
+	root * /srv/site
+
+	# Vite fingerprints these — safe to cache forever.
+	@immutable path /assets/*
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+	# Exported GeoJSON changes when we re-aggregate; cache modestly.
+	@data path /data/*
+	header @data Cache-Control "public, max-age=3600"
+
+	# Compress text/JSON/GeoJSON — this is what tames the ~13 MB rights layer
+	# (gzip/zstd takes it to ~3-4 MB on the wire).
+	encode gzip zstd
+
+	# Single-page app: unknown paths fall back to index.html.
+	try_files {path} {path}/ /index.html
+	file_server
+}

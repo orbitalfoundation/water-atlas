@@ -1,0 +1,16 @@
+{
+  "name": "water-atlas",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Aggregate and surface interesting water datasets (California first) on an open map.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "list": "node aggregator/cli.js --list",
+    "aggregate": "node aggregator/cli.js",
+    "export": "node aggregator/export-geojson.js",
+    "site": "npm --prefix site run dev"
+  }
+}
