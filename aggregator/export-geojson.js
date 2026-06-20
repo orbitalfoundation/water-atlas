@@ -14,6 +14,8 @@ const DB_PATH = join(root, 'data', 'water.db');
 const OUT_DIR = join(root, 'site', 'static', 'data');
 const log = makeLog('export');
 const round5 = (n) => Math.round(n * 1e5) / 1e5; // ~1 m precision, much smaller files
+// Round every coordinate in an arbitrarily-nested GeoJSON coordinate array (Point..MultiPolygon).
+const roundCoords = (c) => (typeof c[0] === 'number' ? c.map(round5) : c.map(roundCoords));
 
 const db = openDb(DB_PATH);
 const sources = await loadSources();
@@ -39,7 +41,10 @@ const layers = [...new Set(sources.map((s) => s.layer))];
 for (const layer of layers) {
   const src = sourceByLayer.get(layer);
   const allow = src?.exportProps ?? null; // optional allowlist keeps dense layers lean
-  const rows = db.prepare('SELECT * FROM features WHERE layer = ? AND lat IS NOT NULL AND lon IS NOT NULL').all(layer);
+  // A feature is mappable if it carries an explicit geometry (polygons) or a lat/lon point.
+  const rows = db.prepare(
+    'SELECT * FROM features WHERE layer = ? AND (geometry IS NOT NULL OR (lat IS NOT NULL AND lon IS NOT NULL))'
+  ).all(layer);
   const features = rows.map((r) => {
     const raw = r.props ? JSON.parse(r.props) : {};
     const kept = allow ? Object.fromEntries(allow.filter((k) => k in raw).map((k) => [k, raw[k]])) : raw;
@@ -50,7 +55,10 @@ for (const layer of layers) {
       props[`${variable}_unit`] = o.unit;
       props[`${variable}_at`] = o.at;
     }
-    return { type: 'Feature', geometry: { type: 'Point', coordinates: [round5(r.lon), round5(r.lat)] }, properties: props };
+    const geometry = r.geometry
+      ? (() => { const g = JSON.parse(r.geometry); return { ...g, coordinates: roundCoords(g.coordinates) }; })()
+      : { type: 'Point', coordinates: [round5(r.lon), round5(r.lat)] };
+    return { type: 'Feature', geometry, properties: props };
   });
 
   const file = `${layer}.geojson`;

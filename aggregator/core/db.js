@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS features (
   name         TEXT,
   lat          REAL,
   lon          REAL,
+  geometry     TEXT,                 -- optional GeoJSON geometry blob (polygons/lines); points use lat/lon
   props        TEXT,                 -- JSON blob of source-specific fields
   fetched_at   TEXT NOT NULL,
   PRIMARY KEY (source, external_id)
@@ -46,17 +47,29 @@ export function openDb(path) {
   const db = new DatabaseSync(path);
   db.exec('PRAGMA journal_mode = WAL;');
   db.exec(SCHEMA);
+  migrate(db);
   return db;
+}
+
+// Forward-only migrations for DBs created before a column existed. Each ADD COLUMN is a
+// no-op once applied; we swallow the "duplicate column" error so re-runs stay idempotent.
+function migrate(db) {
+  for (const sql of ['ALTER TABLE features ADD COLUMN geometry TEXT']) {
+    try { db.exec(sql); } catch { /* column already present */ }
+  }
 }
 
 // Prepared-statement upsert helpers. Call sites stay short; policy (idempotency) lives here.
 export function makeStore(db) {
   const upFeature = db.prepare(`
-    INSERT INTO features (source, layer, external_id, name, lat, lon, props, fetched_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO features (source, layer, external_id, name, lat, lon, geometry, props, fetched_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(source, external_id) DO UPDATE SET
       layer = excluded.layer, name = excluded.name, lat = excluded.lat,
-      lon = excluded.lon, props = excluded.props, fetched_at = excluded.fetched_at`);
+      lon = excluded.lon, geometry = excluded.geometry, props = excluded.props,
+      fetched_at = excluded.fetched_at`);
+
+  const delFeatures = db.prepare('DELETE FROM features WHERE source = ?');
 
   const upObs = db.prepare(`
     INSERT INTO observations
@@ -70,7 +83,13 @@ export function makeStore(db) {
   return {
     feature(f) {
       upFeature.run(f.source, f.layer, String(f.external_id), f.name ?? null,
-        num(f.lat), num(f.lon), f.props ? JSON.stringify(f.props) : null, now());
+        num(f.lat), num(f.lon), f.geometry ? JSON.stringify(f.geometry) : null,
+        f.props ? JSON.stringify(f.props) : null, now());
+    },
+    // Drop a source's features before a fresh load — for snapshot layers (e.g. the weekly
+    // drought map) where last week's polygons must not linger alongside this week's.
+    clearFeatures(source) {
+      delFeatures.run(source);
     },
     observation(o) {
       upObs.run(o.source, String(o.feature_external_id), o.variable,

@@ -62,6 +62,7 @@
       <a href="#faq" onclick={(e) => { e.preventDefault(); onFaq?.(); }}>Read the FAQ</a>
     </p>
     <p class="credit links">
+      An <a href="https://github.com/orbitalfoundation" target="_blank" rel="noopener">Orbital Foundation</a> project ·
       <a href="https://github.com/orbitalfoundation/water-atlas" target="_blank" rel="noopener">Source on GitHub</a> ·
       part of <a href="https://open-cubed.exe.xyz/" target="_blank" rel="noopener">Open-Cubed</a> ·
       builds on the <a href="https://github.com/NewCaliforniaWaterAtlas" target="_blank" rel="noopener">New California Water Atlas</a> archive

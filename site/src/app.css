@@ -150,6 +150,11 @@ html, body, #app { height: 100%; margin: 0; }
   margin: 0 0 0.8rem 1.5ch; color: #344853; line-height: 1.55; font-size: 0.9rem;
 }
 .faq a { color: var(--accent); }
+.faq ul.reading {
+  margin: 0.2rem 0 0.8rem 1.5ch; padding-left: 1.1rem;
+  color: #344853; line-height: 1.5; font-size: 0.9rem;
+}
+.faq ul.reading li { margin: 0 0 0.6rem; }
 .faq code {
   background: #f1f6f9; padding: 0.05rem 0.3rem; border-radius: 4px;
   font-size: 0.85em;
@@ -161,6 +166,7 @@ html, body, #app { height: 100%; margin: 0; }
 }
 .faq .done:hover { background: #095e8b; }
 .faq .credit { font-size: 0.72rem; color: var(--muted); margin-top: 0.9rem; }
+.faq .credit.build { margin-top: 0.3rem; opacity: 0.7; font-variant-numeric: tabular-nums; }
 
 /* ---- popups ---- */
 .maplibregl-popup-content { border-radius: 10px; padding: 0.7rem 0.85rem; }

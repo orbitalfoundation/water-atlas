@@ -27,7 +27,8 @@
 
   <p class="legend">
     Reservoirs are colored by <strong>% full</strong> (red → green) and sized by storage.
-    Click any point for details.
+    The <strong>drought</strong> wash runs yellow (dry) → dark red (exceptional).
+    Click any point or area for details.
   </p>
 
   <div class="actions">

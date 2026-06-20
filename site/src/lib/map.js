@@ -3,8 +3,11 @@
 import maplibregl from 'maplibre-gl';
 import { fmtAf, fmtCfs, fmtPct } from './format.js';
 
-// Draw order, bottom -> top (dense water-rights underneath, big reservoirs on top).
-export const KIND_ORDER = ['right', 'gauge', 'reservoir'];
+// Draw order, bottom -> top (drought wash at the bottom, then dense points, big reservoirs on top).
+export const KIND_ORDER = ['drought', 'right', 'gauge', 'reservoir'];
+
+// Official US Drought Monitor palette, D0 (abnormally dry) -> D4 (exceptional).
+const DM_COLORS = ['#ffff00', '#fcd37f', '#ffaa00', '#e60000', '#730000'];
 
 // Keyless raster basemap (CARTO light + OSM data). No API token required.
 const BASEMAP_STYLE = {
@@ -43,7 +46,23 @@ export function addLayerFromManifest(map, entry) {
     clusterMaxZoom: 11,
   });
 
-  if (entry.cluster) {
+  if (entry.kind === 'fill') {
+    map.addLayer({
+      id: `${entry.layer}-fill`, type: 'fill', source: srcId,
+      paint: {
+        'fill-color': ['match', ['get', 'dm'],
+          0, DM_COLORS[0], 1, DM_COLORS[1], 2, DM_COLORS[2], 3, DM_COLORS[3], 4, DM_COLORS[4],
+          '#cccccc'],
+        'fill-opacity': 0.35,
+      },
+    });
+    map.addLayer({
+      id: `${entry.layer}-outline`, type: 'line', source: srcId,
+      paint: { 'line-color': '#7a3b00', 'line-width': 0.4, 'line-opacity': 0.5 },
+    });
+    bindPopup(map, `${entry.layer}-fill`, entry.kind);
+    return;
+  } else if (entry.cluster) {
     map.addLayer({
       id: `${entry.layer}-clusters`, type: 'circle', source: srcId, filter: ['has', 'point_count'],
       paint: {
@@ -98,7 +117,7 @@ export function addLayerFromManifest(map, entry) {
 }
 
 export function setLayerVisibility(map, entry, visible) {
-  for (const suffix of ['clusters', 'count', 'point']) {
+  for (const suffix of ['clusters', 'count', 'point', 'fill', 'outline']) {
     const id = `${entry.layer}-${suffix}`;
     if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
   }
@@ -110,8 +129,10 @@ function bindPopup(map, layerId, kind) {
   map.on('click', layerId, (e) => {
     const f = e.features?.[0];
     if (!f) return;
+    // Points carry a single coordinate; polygons/lines don't, so anchor at the click.
+    const at = f.geometry?.type === 'Point' ? f.geometry.coordinates : e.lngLat;
     new maplibregl.Popup({ closeButton: true, maxWidth: '280px' })
-      .setLngLat(f.geometry.coordinates)
+      .setLngLat(at)
       .setHTML(popupHtml(kind, f.properties))
       .addTo(map);
   });
@@ -124,6 +145,9 @@ function cursorPointer(map, layerId) {
 }
 
 function popupHtml(kind, p) {
+  if (kind === 'fill')
+    return `<div class="pop"><h3>${esc(p.dm_label ?? p.name)}</h3>
+      <small>US Drought Monitor${p.valid_date ? ' · valid ' + esc(p.valid_date) : ''}</small></div>`;
   if (kind === 'reservoir')
     return `<div class="pop"><h3>${esc(p.name)}</h3>
       <div class="pop-big">${fmtPct(p.pct_full)} full</div>

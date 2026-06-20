@@ -85,6 +85,21 @@
     </details>
 
     <details>
+      <summary>Is this just the old atlas again — or something more?</summary>
+      <p>
+        It starts where the original did — rights, storage, flow — but it isn't trying to be a
+        faithful copy. The 1979 atlas and the 2013 revival shared a <em>deeper</em> vision: a living
+        picture of how water actually moves and is managed, not a fixed set of maps. We're leaning
+        into that. The first step beyond the original scope is showing <strong>live conditions</strong>,
+        not just legal abstractions: the <strong>US Drought Monitor</strong> layer paints current
+        drought severity (D0–D4) under the rights and reservoirs, so "who's entitled to take water"
+        sits next to "how dry is it right now." Groundwater decline, snowpack, and watershed flows
+        are the natural next layers — each one pulls the map further from a static atlas toward a
+        live one.
+      </p>
+    </details>
+
+    <details>
       <summary>Why water, specifically?</summary>
       <p>
         Because water is intersectional — it touches almost everything we care about. Agriculture,
@@ -180,8 +195,9 @@
         Toggle layers in the panel at top-right. <strong>Reservoirs</strong> are colored by % full
         (red → green) and sized by storage. <strong>Gauges</strong> show recent streamflow.
         <strong>Water rights</strong> are points of diversion — where someone is entitled to take
-        water. Click any point for details. Dense layers cluster when zoomed out; zoom in to split
-        them apart.
+        water. The <strong>drought</strong> wash behind everything is the US Drought Monitor, shaded
+        yellow (abnormally dry) → dark red (exceptional drought). Click any point or area for details.
+        Dense layers cluster when zoomed out; zoom in to split them apart.
       </p>
     </details>
 
@@ -203,10 +219,12 @@
       <summary>Where does the data come from? Can I trust it?</summary>
       <p>
         From the agencies of record: <strong>USGS</strong> (stream gauges, US public domain),
-        <strong>California DWR / CDEC</strong> (reservoirs), and the
-        <strong>State Water Board / eWRIMS</strong> (water rights). It's all public data, fetched
-        directly. The basemap is © OpenStreetMap contributors © CARTO. We add no numbers of our own —
-        where we derive something (like % full), the inputs are shown.
+        <strong>California DWR / CDEC</strong> (reservoirs), the
+        <strong>State Water Board / eWRIMS</strong> (water rights), and the
+        <strong>US Drought Monitor</strong> (a NOAA / USDA / National Drought Mitigation Center
+        partnership). It's all public data, fetched directly. The basemap is © OpenStreetMap
+        contributors © CARTO. We add no numbers of our own — where we derive something (like % full),
+        the inputs are shown.
       </p>
     </details>
 
@@ -219,6 +237,33 @@
       </p>
     </details>
 
+    <!-- ───────────────────────── FURTHER READING ───────────────────────── -->
+    <h2>Further reading</h2>
+
+    <details>
+      <summary>Essays, background &amp; sources</summary>
+      <ul class="reading">
+        <li>
+          Chacha Sikes, <a href="https://boomcalifornia.org/2013/10/22/a-new-water-atlas/" target="_blank" rel="noopener">“A New Water Atlas”</a>
+          — <em>Boom: A Journal of California</em>, 2013. A founder's manifesto for a citizen-focused
+          water atlas; the spirit this project carries forward.
+        </li>
+        <li>
+          <a href="https://longnow.org/ideas/the-new-california-water-atlas/" target="_blank" rel="noopener">“The New California Water Atlas”</a>
+          — The Long Now Foundation. Context on the 02012–02014 effort and why durability matters.
+        </li>
+        <li>
+          Grantham &amp; Viers, <a href="https://iopscience.iop.org/article/10.1088/1748-9326/9/8/084012" target="_blank" rel="noopener">“100 years of California's water rights system”</a>
+          — <em>Environmental Research Letters</em>, 2014. The source for “~5× over-allocated”
+          (≈370M acre-feet of rights vs ≈70M of runoff).
+        </li>
+        <li>
+          <a href="https://github.com/NewCaliforniaWaterAtlas" target="_blank" rel="noopener">New California Water Atlas archive</a>
+          — the original project's code and data, still on GitHub though the live site went dark.
+        </li>
+      </ul>
+    </details>
+
     <!-- ───────────────────────── LINKS ───────────────────────── -->
     <h2>Links &amp; source</h2>
 
@@ -227,9 +272,10 @@
       <p>
         The full source — collector, exporter, and this site — lives at
         <a href="https://github.com/orbitalfoundation/water-atlas" target="_blank" rel="noopener">github.com/orbitalfoundation/water-atlas</a>.
-        Clone it and a few commands rebuild the whole atlas from public data. It's part of
-        <a href="https://open-cubed.exe.xyz/" target="_blank" rel="noopener">Open-Cubed</a>, an
-        initiative for small, open, durable civic tools.
+        Clone it and a few commands rebuild the whole atlas from public data. It's an
+        <a href="https://github.com/orbitalfoundation" target="_blank" rel="noopener">Orbital Foundation</a>
+        project, part of <a href="https://open-cubed.exe.xyz/" target="_blank" rel="noopener">Open-Cubed</a>,
+        an initiative for small, open, durable civic tools.
       </p>
       <p>
         It stands on the shoulders of the original
@@ -239,11 +285,34 @@
       </p>
     </details>
 
+    <!-- ───────────────────────── ACKNOWLEDGEMENTS ───────────────────────── -->
+    <h2>Acknowledgements</h2>
+
+    <details>
+      <summary>Who built the original — and credit where it's due</summary>
+      <p>
+        This rebuild owes an obvious debt to the people behind the original New California Water
+        Atlas. <strong>Laci Videmsky</strong> led it and <strong>Chacha Sikes</strong> co-founded and
+        helped shape its citizen-atlas vision, incubated at the
+        <a href="https://rri.org/" target="_blank" rel="noopener">Resource Renewal Institute</a> and
+        funded by Patagonia. <strong>Huey Johnson</strong> (former California Secretary for Resources,
+        RRI's founder) championed and helped fund it, and <strong>Stewart Brand</strong> advised.
+        <strong>Ted Grantham</strong> (UC Davis) contributed on the data side — the same Grantham
+        whose research anchors the “~5×” over-allocation figure here.
+      </p>
+      <p>
+        Further back, the whole idea descends from the landmark <em>printed</em> 1979 California
+        Water Atlas. We're grateful to all of them; any errors in this version are ours, not theirs.
+      </p>
+    </details>
+
     <button class="done" onclick={onClose}>Back to the map →</button>
     <p class="credit">
       Open data from USGS, California DWR (CDEC) &amp; the State Water Board (eWRIMS). ·
+      An <a href="https://github.com/orbitalfoundation" target="_blank" rel="noopener">Orbital Foundation</a> project ·
       <a href="https://github.com/orbitalfoundation/water-atlas" target="_blank" rel="noopener">Source</a> ·
       <a href="https://open-cubed.exe.xyz/" target="_blank" rel="noopener">Open-Cubed</a>
     </p>
+    <p class="credit build">Build {__BUILD_DATE__}</p>
   </div>
 </div>
