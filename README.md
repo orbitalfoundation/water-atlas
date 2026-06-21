@@ -1,5 +1,7 @@
 # Water Atlas
 
+See live site here: [New New California Water Atlas](https://water-atlas.exe.xyz) 
+
 California's water, made legible — built entirely from **open public data**, and rebuildable by
 anyone from a `git clone`. A fresh take on the [New California Water Atlas](https://longnow.org/ideas/the-new-california-water-atlas/)
 (≈2013), which went offline — this version is small, open, and durable on purpose.
