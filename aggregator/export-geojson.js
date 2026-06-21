@@ -66,7 +66,8 @@ for (const layer of layers) {
   manifest.push({
     layer, source: src?.id, title: src?.title ?? layer, description: src?.description ?? '',
     color: src?.style?.color ?? '#3aa0d1', cluster: src?.style?.cluster ?? false,
-    kind: src?.style?.kind ?? 'point', count: features.length, file,
+    kind: src?.style?.kind ?? 'point', hidden: src?.style?.hidden ?? false,
+    count: features.length, file,
   });
   log.ok(`${layer}: ${features.length} features -> ${file}`);
 }

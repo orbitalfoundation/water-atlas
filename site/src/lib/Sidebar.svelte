@@ -28,7 +28,8 @@
   <p class="legend">
     Reservoirs are colored by <strong>% full</strong> (red → green) and sized by storage.
     The <strong>drought</strong> wash runs yellow (dry) → dark red (exceptional).
-    Click any point or area for details.
+    <strong>Oregon</strong> &amp; <strong>Nevada</strong> water rights are off by default — toggle
+    them on and they load on demand. Click any point or area for details.
   </p>
 
   <div class="actions">

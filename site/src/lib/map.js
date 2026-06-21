@@ -60,7 +60,7 @@ export function addLayerFromManifest(map, entry) {
       id: `${entry.layer}-outline`, type: 'line', source: srcId,
       paint: { 'line-color': '#7a3b00', 'line-width': 0.4, 'line-opacity': 0.5 },
     });
-    bindPopup(map, `${entry.layer}-fill`, entry.kind);
+    bindPopup(map, `${entry.layer}-fill`, entry);
     return;
   } else if (entry.cluster) {
     map.addLayer({
@@ -113,7 +113,7 @@ export function addLayerFromManifest(map, entry) {
     cursorPointer(map, `${entry.layer}-point`);
   }
 
-  bindPopup(map, `${entry.layer}-point`, entry.kind);
+  bindPopup(map, `${entry.layer}-point`, entry);
 }
 
 export function setLayerVisibility(map, entry, visible) {
@@ -125,7 +125,7 @@ export function setLayerVisibility(map, entry, visible) {
 
 // --- internals -----------------------------------------------------------
 
-function bindPopup(map, layerId, kind) {
+function bindPopup(map, layerId, entry) {
   map.on('click', layerId, (e) => {
     const f = e.features?.[0];
     if (!f) return;
@@ -133,18 +133,26 @@ function bindPopup(map, layerId, kind) {
     const at = f.geometry?.type === 'Point' ? f.geometry.coordinates : e.lngLat;
     new maplibregl.Popup({ closeButton: true, maxWidth: '280px' })
       .setLngLat(at)
-      .setHTML(popupHtml(kind, f.properties))
+      .setHTML(popupHtml(entry, f.properties))
       .addTo(map);
   });
   cursorPointer(map, layerId);
 }
+
+// Per-source footer label for the rights popup (the agency of record).
+const RIGHTS_AGENCY = {
+  'ca-water-rights': 'eWRIMS · CA State Water Board',
+  'or-water-rights': 'OWRD · Oregon',
+  'nv-water-rights': 'NDWR · Nevada',
+};
 
 function cursorPointer(map, layerId) {
   map.on('mouseenter', layerId, () => (map.getCanvas().style.cursor = 'pointer'));
   map.on('mouseleave', layerId, () => (map.getCanvas().style.cursor = ''));
 }
 
-function popupHtml(kind, p) {
+function popupHtml(entry, p) {
+  const kind = entry.kind;
   if (kind === 'fill')
     return `<div class="pop"><h3>${esc(p.dm_label ?? p.name)}</h3>
       <small>US Drought Monitor${p.valid_date ? ' · valid ' + esc(p.valid_date) : ''}</small></div>`;
@@ -160,11 +168,24 @@ function popupHtml(kind, p) {
       <table><tr><td>County</td><td>${esc(p.county) || '—'}</td></tr>
       <tr><td>Site</td><td>${esc(p.id)}</td></tr></table>
       <small>${p.discharge_cfs_at ? 'as of ' + esc(p.discharge_cfs_at) + ' · ' : ''}USGS</small></div>`;
-  return `<div class="pop"><h3>Water right ${esc(p.appl_id ?? p.id)}</h3>
-    <table><tr><td>Source</td><td>${esc(p.source_water) || '—'}</td></tr>
-    <tr><td>Watershed</td><td>${esc(p.watershed) || '—'}</td></tr>
-    <tr><td>County</td><td>${esc(p.county) || '—'}</td></tr></table>
-    <small>eWRIMS point of diversion</small></div>`;
+  // Rights (CA / OR / NV): adaptive — show only the fields a given state actually provides.
+  const id = p.appl_id ?? p.app ?? p.id ?? p.name;
+  const rows = [
+    ['Owner', p.owner],
+    ['Use', p.use],
+    ['Status', p.status],
+    ['Priority', p.priority],
+    ['Rate', p.rate_cfs != null ? `${p.rate_cfs} cfs` : null],
+    ['Amount', p.acre_feet != null ? fmtAf(p.acre_feet) : null],
+    ['Place of use', p.pou_acres != null ? `${p.pou_acres.toLocaleString()} ac` : null],
+    ['Source', p.source_water],
+    ['County', p.county],
+    ['Watershed', p.watershed],
+    ['Basin', p.basin],
+  ].filter(([, v]) => v != null && v !== '');
+  return `<div class="pop"><h3>Water right ${esc(id)}</h3>
+    <table>${rows.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</table>
+    <small>${esc(RIGHTS_AGENCY[entry.source] ?? 'point of diversion')}</small></div>`;
 }
 
 const esc = (s) =>

@@ -93,8 +93,10 @@
         into that. The first step beyond the original scope is showing <strong>live conditions</strong>,
         not just legal abstractions: the <strong>US Drought Monitor</strong> layer paints current
         drought severity (D0–D4) under the rights and reservoirs, so "who's entitled to take water"
-        sits next to "how dry is it right now." Groundwater decline, snowpack, and watershed flows
-        are the natural next layers — each one pulls the map further from a static atlas toward a
+        sits next to "how dry is it right now." The second is crossing the state line — water
+        doesn't stop at borders, so <strong>Oregon</strong> and <strong>Nevada</strong> water rights
+        are now in the map too (toggle them on; they load on demand). Groundwater decline, snowpack,
+        and watershed flows are the natural next layers — each one pulls the map further from a static atlas toward a
         live one.
       </p>
     </details>
@@ -134,6 +136,27 @@
         (including a plain web server), with no backend, no accounts, and no vendor. The bet is
         <em>small + open + rebuildable</em> over <em>feature-rich + dependent</em>. The tradeoff is
         real: we give up heavy interactive analysis to gain something that's hard to kill.
+      </p>
+    </details>
+
+    <details>
+      <summary>What about an open GIS workbench like GeoLibre?</summary>
+      <p>
+        <a href="https://geolibre.app/" target="_blank" rel="noopener">GeoLibre</a> deserves a real
+        answer, because unlike the proprietary tools it shares our values: it's open-source and
+        <em>browser-native</em> — a full GIS workbench (MapLibre + DuckDB-WASM + deck.gl) that runs
+        client-side with no backend, and reads exactly the durable open formats we want to lean on
+        (PMTiles, GeoParquet, FlatGeobuf, COG). So this isn't a "proprietary vs open" rejection.
+      </p>
+      <p>
+        The distinction is <em>workbench vs. story</em>. GeoLibre is a powerful tool for <em>doing</em>
+        GIS — load anything, run analysis, author maps. The Water Atlas is a single, opinionated
+        <em>narrative</em>: a curated pipeline and a deliberately minimal UI built to tell one story
+        (paper water vs. wet water) to citizens, not to hand them a toolbox. Rebuilding the public
+        site on a general workbench would trade that focus — and a tiny static payload — for features
+        our audience doesn't need. So we don't build <em>on</em> GeoLibre; but it's the open,
+        zero-install analysis companion we'd point a power user to, and we aim to publish our data in
+        the open formats it (and QGIS) can open directly.
       </p>
     </details>
 
@@ -220,7 +243,9 @@
       <p>
         From the agencies of record: <strong>USGS</strong> (stream gauges, US public domain),
         <strong>California DWR / CDEC</strong> (reservoirs), the
-        <strong>State Water Board / eWRIMS</strong> (water rights), and the
+        <strong>State Water Board / eWRIMS</strong> (California water rights), the
+        <strong>Oregon Water Resources Dept</strong> and <strong>Nevada Division of Water
+        Resources</strong> (their states' water rights), and the
         <strong>US Drought Monitor</strong> (a NOAA / USDA / National Drought Mitigation Center
         partnership). It's all public data, fetched directly. The basemap is © OpenStreetMap
         contributors © CARTO. We add no numbers of our own — where we derive something (like % full),
