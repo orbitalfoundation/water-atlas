@@ -289,6 +289,52 @@
       </ul>
     </details>
 
+    <!-- ───────────────────────── TOOLS ───────────────────────── -->
+    <h2>Cool tools</h2>
+
+    <details>
+      <summary>Open tools we love (and lean on)</summary>
+      <p>
+        This atlas is possible because the open-geospatial ecosystem is so good now. If you want to
+        build something like it — or just poke at the data — these are the tools worth knowing:
+      </p>
+      <ul class="reading">
+        <li>
+          <a href="https://geolibre.app/" target="_blank" rel="noopener">GeoLibre</a> — an
+          open-source, browser-native GIS <em>workbench</em> (MapLibre + DuckDB-WASM + deck.gl, no
+          backend). The zero-install, durable answer to “I want to actually analyze this data.”
+        </li>
+        <li>
+          <a href="https://maplibre.org/" target="_blank" rel="noopener">MapLibre GL JS</a> — the
+          fully open map renderer that draws this site. No API keys, no vendor.
+        </li>
+        <li>
+          <a href="https://qgis.org/" target="_blank" rel="noopener">QGIS</a> — the free desktop GIS
+          standard. More powerful than any web map for real analysis.
+        </li>
+        <li>
+          <a href="https://github.com/felt/tippecanoe" target="_blank" rel="noopener">tippecanoe</a>
+          + <a href="https://docs.protomaps.com/pmtiles/" target="_blank" rel="noopener">PMTiles</a>
+          — bake millions of points into a single static vector-tile file that serves from anywhere.
+          (Our planned fix for the dense rights layers.)
+        </li>
+        <li>
+          <a href="https://duckdb.org/docs/extensions/spatial.html" target="_blank" rel="noopener">DuckDB&nbsp;+ spatial</a>
+          — astonishingly fast local SQL over geospatial files; great for joins and clips before you
+          ever publish anything.
+        </li>
+        <li>
+          <a href="https://gdal.org/" target="_blank" rel="noopener">GDAL / OGR</a> — the swiss-army
+          knife that converts between every geospatial format ever invented.
+        </li>
+        <li>
+          <a href="https://docs.protomaps.com/" target="_blank" rel="noopener">Protomaps</a> &amp;
+          <a href="https://deck.gl/" target="_blank" rel="noopener">deck.gl</a> — serverless basemaps
+          and GPU-powered visualization for when point counts get big.
+        </li>
+      </ul>
+    </details>
+
     <!-- ───────────────────────── LINKS ───────────────────────── -->
     <h2>Links &amp; source</h2>
 
