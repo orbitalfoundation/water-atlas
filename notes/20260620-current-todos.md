@@ -44,8 +44,20 @@ stopgap and turn the neighbor layers back on by default. Doubles as the **GeoPar
 that makes our data open in GeoLibre/QGIS (see architecture note). Already in place: Caddy gzip/zstd,
 6-dp rounding, clustering, lazy-load.
 
-**Open Q:** is `tippecanoe` an acceptable dev-time dependency given the rebuild-from-clone ethos? (It
-is build-time only, so yes — but document the install step.)
+**Decisions reached in discussion (2026-06-20, not yet built — user paused it):**
+- **Scope:** rights-only first (CA + OR + NV). Gauges (6.7k) are already fine; reservoirs/drought tiny.
+- **Keep GeoJSON as the canonical export; add `.pmtiles` as a parallel *serving* format** — so the
+  data stays trivially inspectable and PMTiles is purely a delivery optimization.
+- **Thinning:** let tippecanoe drop/coalesce dense points at low zoom and turn *off* MapLibre's
+  client-side clustering for tiled layers (slightly different look — eyeball it).
+- **Once it lands:** drop the lazy-load stopgap and turn OR/NV back **on by default**.
+- **Bonus:** PMTiles (and/or GeoParquet) is openable directly in GeoLibre/QGIS — fulfills the
+  "publish in a portable analysis format" idea.
+
+**Open Q:** `tippecanoe` is a dev-time-only dependency (a fresh clone still *runs*; you only need it
+to *regenerate* tiles) — acceptable, but document the Homebrew/apt/release-binary install step.
+
+**Status:** discussed and scoped; **user chose to defer** — not urgent enough to do right now.
 
 ---
 
