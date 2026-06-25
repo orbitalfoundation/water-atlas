@@ -1,5 +1,7 @@
 # Water Atlas
 
+![Image of Water Atlas](water-atlas.png)
+
 See live site here: [New New California Water Atlas](https://water-atlas.exe.xyz) 
 
 California's water, made legible — built entirely from **open public data**, and rebuildable by
