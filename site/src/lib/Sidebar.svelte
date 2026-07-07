@@ -48,13 +48,6 @@
                 <span class="drought-block" style="background: {level.color};"></span>
               {/each}
             </div>
-            <div class="scale-info">ⓘ
-              <div class="scale-legend">
-                {#each DROUGHT_LEVELS as level}
-                  <div class="scale-legend-row"><span class="legend-dot" style="background: {level.color};"></span>{level.code} {level.label}</div>
-                {/each}
-              </div>
-            </div>
           </div>
         {:else if layer.layer === 'reservoirs'}
           <div class="scale-bar">
