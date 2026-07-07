@@ -15,36 +15,52 @@ html, body, #app { height: 100%; margin: 0; }
 .panel {
   position: absolute;
   top: 1rem; right: 1rem; z-index: 5;
-  width: 290px; max-width: calc(100vw - 2rem);
+  width: 340px; max-width: calc(100vw - 2rem);
   background: var(--panel);
   backdrop-filter: blur(6px);
   border-radius: 12px;
   box-shadow: 0 6px 24px rgba(16, 33, 43, 0.18);
-  padding: 1rem 1.1rem;
+  padding: 1.2rem 1.4rem;
 }
 .panel header h1 { margin: 0; font-size: 1.25rem; letter-spacing: -0.01em; }
-.panel .sub { margin: 0.1rem 0 0.8rem; color: var(--muted); font-size: 0.8rem; }
+.panel .sub { margin: 0.1rem 0 0.8rem; color: var(--muted); font-size: 0.86rem; }
 .panel .loading { color: var(--muted); font-size: 0.85rem; }
 
 .layers { list-style: none; margin: 0; padding: 0; }
+.layer-group { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); padding: 0.3rem 0; margin-top: 0.8rem; border-top: none !important; grid-column: 1 / -1; }
 .layers li {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 0.5rem; padding: 0.35rem 0; border-top: 1px solid #eef1f3;
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.2rem 0.5rem; padding: 0.25rem 0; border-top: 1px solid #eef1f3;
 }
 .layers label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.86rem; }
-.layers .swatch { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.2); flex: none; }
+.layers .swatch { width: 16px; height: 16px; border-radius: 50%; flex: none; }
 .layers .title { line-height: 1.15; }
-.layers .count { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.75rem; flex: none; }
+.layers .count { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.86rem; flex: none; }
 
-.legend { color: var(--muted); font-size: 0.76rem; line-height: 1.4; margin: 0.7rem 0 0.4rem; }
+.layers li:has(.scale-bar) { border-top: none; }
+.scale-bar { display: flex; align-items: center; gap: 0.3rem; width: 100%; padding: 0.2rem 0 0.1rem 1.4rem; grid-column: 1 / -1; }
+.drought-blocks { display: flex; gap: 1px; width: 140px; flex: none; }
+.drought-block { flex: 1; height: 12px; }
+.drought-block:first-child { border-radius: 3px 0 0 3px; }
+.drought-block:last-child { border-radius: 0 3px 3px 0; }
+.scale-info { position: relative; flex: none; cursor: pointer; font-size: 0.86rem; color: var(--muted); padding: 0.1rem 0.3rem; }
+.scale-info .scale-legend { display: none; position: absolute; right: 0; top: 1.2rem; background: #fff; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); padding: 0.3rem 0.5rem; margin: 0; list-style: none; white-space: nowrap; z-index: 10; }
+.scale-info:hover .scale-legend { display: block; }
+.scale-legend-row { display: flex; align-items: center; gap: 0.3rem; font-size: 0.86rem; padding: 0.1rem 0; color: var(--ink); }
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+.gradient-track { display: inline-block; width: 140px; height: 12px; border-radius: 4px; flex: none; }
+.scale-label { font-size: 0.86rem; color: var(--muted); white-space: nowrap; }
+
+.legend { color: var(--muted); font-size: 0.86rem; line-height: 1.4; margin: 0.7rem 0 0.4rem; }
 .panel .actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
 .panel .about {
   flex: 1; padding: 0.5rem; cursor: pointer;
   background: #f1f6f9; border: 1px solid #dde7ec; border-radius: 8px;
-  color: var(--accent); font-weight: 600; font-size: 0.82rem;
+  color: var(--accent); font-weight: 600; font-size: 0.86rem;
 }
 .panel .about:hover { background: #e6eff4; }
-.panel footer { margin-top: 0.8rem; color: var(--muted); font-size: 0.72rem; text-align: center; line-height: 1.5; }
+.panel footer { margin-top: 0.8rem; color: var(--muted); font-size: 0.86rem; text-align: center; line-height: 1.5; }
 .panel footer a { color: var(--accent); text-decoration: none; }
 .panel footer a:hover { text-decoration: underline; }
 
@@ -70,15 +86,15 @@ html, body, #app { height: 100%; margin: 0; }
 .stats { display: flex; gap: 1rem; margin: 1.2rem 0; }
 .stats div { flex: 1; background: #f1f6f9; border-radius: 10px; padding: 0.8rem; text-align: center; }
 .stats strong { display: block; font-size: 1.5rem; color: var(--accent); letter-spacing: -0.02em; }
-.stats span { font-size: 0.72rem; color: var(--muted); line-height: 1.25; display: block; margin-top: 0.25rem; }
+.stats span { font-size: 0.86rem; color: var(--muted); line-height: 1.25; display: block; margin-top: 0.25rem; }
 
 .gap { margin: 1.2rem 0 0.4rem; }
 .gap-head {
-  font-size: 0.74rem !important; text-transform: uppercase; letter-spacing: 0.08em;
+  font-size: 0.86rem !important; text-transform: uppercase; letter-spacing: 0.08em;
   color: var(--accent); font-weight: 700; margin: 0 0 0.6rem !important;
 }
 .gap .bar { margin: 0 0 0.5rem; }
-.gap .bar-label { font-size: 0.78rem; color: var(--muted); display: block; margin-bottom: 0.2rem; }
+.gap .bar-label { font-size: 0.86rem; color: var(--muted); display: block; margin-bottom: 0.2rem; }
 .gap .track {
   position: relative; background: #f1f6f9; border-radius: 6px;
   height: 1.4rem; display: flex; align-items: center;
@@ -88,9 +104,9 @@ html, body, #app { height: 100%; margin: 0; }
 .gap .fill.wet { background: #08519c; }
 .gap .track em {
   position: absolute; right: 0.5rem; font-style: normal;
-  font-size: 0.72rem; font-weight: 600; color: #344853;
+  font-size: 0.86rem; font-weight: 600; color: #344853;
 }
-.gap-note { font-size: 0.82rem !important; color: #344853 !important; margin: 0.5rem 0 0 !important; }
+.gap-note { font-size: 0.86rem !important; color: #344853 !important; margin: 0.5rem 0 0 !important; }
 
 .splash button {
   margin-top: 0.6rem; padding: 0.7rem 1.3rem; cursor: pointer;
@@ -98,7 +114,7 @@ html, body, #app { height: 100%; margin: 0; }
   font-size: 0.95rem; font-weight: 600;
 }
 .splash button:hover { background: #095e8b; }
-.splash .credit { font-size: 0.72rem; color: var(--muted); margin-top: 0.9rem; }
+.splash .credit { font-size: 0.86rem; color: var(--muted); margin-top: 0.9rem; }
 .splash .credit.links { margin-top: 0.4rem; }
 
 /* ---- faq ---- */
@@ -165,14 +181,19 @@ html, body, #app { height: 100%; margin: 0; }
   font-size: 0.95rem; font-weight: 600;
 }
 .faq .done:hover { background: #095e8b; }
-.faq .credit { font-size: 0.72rem; color: var(--muted); margin-top: 0.9rem; }
+.faq .credit { font-size: 0.86rem; color: var(--muted); margin-top: 0.9rem; }
 .faq .credit.build { margin-top: 0.3rem; opacity: 0.7; font-variant-numeric: tabular-nums; }
 
 /* ---- popups ---- */
-.maplibregl-popup-content { border-radius: 10px; padding: 0.7rem 0.85rem; }
-.pop h3 { margin: 0 0 0.3rem; font-size: 0.92rem; }
-.pop-big { font-size: 1.25rem; font-weight: 700; color: var(--accent); margin-bottom: 0.3rem; }
-.pop table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-.pop td { padding: 0.1rem 0; vertical-align: top; }
-.pop td:first-child { color: var(--muted); padding-right: 0.8rem; white-space: nowrap; }
-.pop small { display: block; margin-top: 0.4rem; color: var(--muted); font-size: 0.7rem; }
+.maplibregl-popup-content { border-radius: 10px !important; padding: 14px 16px !important; font-size: 15px !important; line-height: 1.5 !important; box-shadow: 0 4px 16px rgba(0,0,0,0.25) !important; position: relative; }
+.maplibregl-popup-close-button { font-size: 20px !important; padding: 4px 8px !important; color: var(--muted) !important; line-height: 1 !important; }
+.maplibregl-popup-close-button:hover { color: var(--ink) !important; background: transparent !important; }
+.pop h3 { margin: 0 0 4px !important; font-size: 16px !important; display: flex; align-items: center; gap: 6px; }
+.pop-dot { width: 12px; height: 12px; border-radius: 50%; flex: none; display: inline-block; }
+.pop-big { font-size: 22px !important; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+.pop table { width: 100%; border-collapse: collapse; font-size: 14px !important; }
+.pop td { padding: 3px 0; vertical-align: top; }
+.pop td:first-child { color: var(--muted); padding-right: 10px; white-space: nowrap; }
+.pop-label { font-size: 14px !important; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.pop-note { font-size: 14px !important; color: var(--muted); font-style: italic; margin-bottom: 4px; }
+.pop small { display: block; margin-top: 6px; color: var(--muted); font-size: 13px !important; }
