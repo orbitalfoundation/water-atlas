@@ -18,7 +18,7 @@
 <aside class="panel">
   <header>
     <h1>Water Atlas</h1>
-    <p class="sub">California · live water data</p>
+    <p class="sub">The western waters · live data</p>
   </header>
 
   {#if loading}
@@ -64,8 +64,8 @@
     <strong>Rivers</strong> are drawn wider as they gather size on their way down from the mountains.
     Reservoirs are colored by <strong>% full</strong> (red → green) and sized by storage.
     The <strong>drought</strong> wash runs yellow (dry) → dark red (exceptional).
-    <strong>Oregon</strong> &amp; <strong>Nevada</strong> water rights are off by default — toggle
-    them on and they load on demand. Click any point or area for details.
+    <strong>Oregon</strong>, <strong>Nevada</strong> &amp; <strong>Washington</strong> water rights are
+    off by default — toggle them on and they load on demand. Click any point or area for details.
   </p>
 
   <div class="actions">

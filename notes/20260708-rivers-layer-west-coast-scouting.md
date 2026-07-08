@@ -83,8 +83,23 @@ BC's open-data stack (DataBC WFS + federal OGC APIs) is genuinely good. Probed
 
 ## Suggested order of attack
 
-1. WA rivers + gauges + drought (an afternoon; "whole US West Coast" moment)
-2. WA rights, sparse attributes (same PR or next)
+1. ~~WA rivers + gauges + drought~~ ✅ **shipped later the same day** (see below)
+2. ~~WA rights, sparse attributes~~ ✅ shipped (verified points only)
 3. BC licences + gauges (high value, low effort; first metric-unit handling)
 4. BC hydrography after a sizing decision · WA reservoirs (USBR/USACE) whenever
 5. BC drought wash · reservoirs stay US-only for now
+
+## ✅ Update, same day: Washington shipped
+
+- **Rivers** → 56,983 flowlines (second bbox for WA, deduped by comid so Idaho
+  stays out). **Gauges** → `usgs-sites` generalized to a per-state FIPS list
+  (CA·OR·NV·WA): 18,391 sites, 4,587 with live discharge. **Drought** → clip
+  widened to the West footprint (65 polygons), retitled "(West)".
+- **WA rights** → new `wa-water-rights.js`: 165,226 verified device points
+  (layer 5), sparse attributes as scouted — type code mapped to a label, shown
+  via a new `Type` row in the shared rights popup. Hidden/lazy like OR/NV.
+- **Framing** → default view now fits the whole coast (center −119.8, 40.8 /
+  zoom 4.8); sidebar tagline "The western waters · live data".
+- Still CA-only: **reservoirs** (CDEC has no WA analog — USBR/USACE path in the
+  table above). Splash/FAQ copy still tells the California story — a future
+  content pass. Remaining next step: **BC** (endpoints above, all verified).

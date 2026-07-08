@@ -10,10 +10,12 @@
 //   totdasqkm    total upstream drainage area, km²
 //   ftype        StreamRiver / CanalDitch / ArtificialPath / ...
 //
-// We take streamorder >= MIN_ORDER inside the atlas footprint (CA + OR, which
-// necessarily also brackets NV — a bonus, since the atlas maps NV rights too).
+// We take streamorder >= MIN_ORDER inside the atlas footprint: one envelope for
+// CA + OR (which necessarily also brackets NV — a bonus, since the atlas maps NV
+// rights too) and a second, tighter one for WA (a single big box would drag in
+// most of Idaho). Overlap between the boxes is deduped by comid before storing.
 // Order >= 4 keeps the mountain tributaries that feed the trunk rivers without
-// dragging in every first-order creek (~50k of ~350k flowlines in the box).
+// dragging in every first-order creek (~60k of ~400k flowlines in the boxes).
 //
 // The dataset is static (NHDPlus V2 is finished data), so pages are fetched
 // with cache 'prefer': the first run downloads ~25 pages; re-runs replay from
@@ -23,15 +25,18 @@ const LAYER = 'rivers';
 
 const MIN_ORDER = 4;
 const PAGE = 2000; // service maxRecordCount
-// Atlas footprint [west, south, east, north]: California + Oregon (+ Nevada between them).
-const BBOX = '-124.6,32.4,-114.0,46.4';
+// Atlas footprint, [west, south, east, north] per box:
+const BBOXES = [
+  '-124.6,32.4,-114.0,46.4', // California + Oregon (+ Nevada between them)
+  '-124.9,45.5,-116.9,49.05', // Washington (kept separate to exclude Idaho)
+];
 
 const BASE = 'https://watersgeo.epa.gov/arcgis/rest/services/NHDPlus/NHDPlus/MapServer/2/query';
 
-function pageUrl(offset) {
+function pageUrl(bbox, offset) {
   const q = new URLSearchParams({
     where: `streamorder >= ${MIN_ORDER}`,
-    geometry: BBOX,
+    geometry: bbox,
     geometryType: 'esriGeometryEnvelope',
     inSR: '4326',
     spatialRel: 'esriSpatialRelIntersects',
@@ -57,23 +62,26 @@ export default {
 
   async run({ store, http, log }) {
     // Gather every page before touching the store, so a mid-run failure can't
-    // leave the layer half-loaded.
-    const collected = [];
-    for (let offset = 0; ; offset += PAGE) {
-      const fc = await http.getJson(pageUrl(offset), { cache: 'prefer' });
-      if (fc.error) throw new Error(`ArcGIS error: ${JSON.stringify(fc.error)}`);
-      const feats = fc.features ?? [];
-      collected.push(...feats);
-      log.info(`rivers: page @${offset} -> ${feats.length} flowlines (total ${collected.length})`);
-      if (feats.length < PAGE) break;
+    // leave the layer half-loaded. Boxes overlap along the OR/WA border; the
+    // comid-keyed map dedupes.
+    const byComid = new Map();
+    for (const bbox of BBOXES) {
+      for (let offset = 0; ; offset += PAGE) {
+        const fc = await http.getJson(pageUrl(bbox, offset), { cache: 'prefer' });
+        if (fc.error) throw new Error(`ArcGIS error: ${JSON.stringify(fc.error)}`);
+        const feats = fc.features ?? [];
+        for (const f of feats) if (f.properties?.comid != null) byComid.set(f.properties.comid, f);
+        log.info(`rivers: box [${bbox}] @${offset} -> ${feats.length} flowlines (total ${byComid.size})`);
+        if (feats.length < PAGE) break;
+      }
     }
-    if (!collected.length) throw new Error('NHDPlus returned no flowlines');
+    if (!byComid.size) throw new Error('NHDPlus returned no flowlines');
 
     store.clearFeatures(ID);
     let kept = 0;
-    for (const f of collected) {
+    for (const f of byComid.values()) {
       const p = f.properties ?? {};
-      if (p.comid == null || !f.geometry) continue;
+      if (!f.geometry) continue;
       store.feature({
         source: ID,
         layer: LAYER,

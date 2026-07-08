@@ -1,7 +1,7 @@
-// US Drought Monitor — current conditions, clipped to California.
+// US Drought Monitor — current conditions, clipped to the atlas's West Coast footprint.
 // The USDM is a weekly (Thursday) consensus map of drought severity, published as
 // national polygons by category D0–D4. We pull the live FeatureServer, keep only the
-// polygon parts that fall in/around California, and store one feature per part.
+// polygon parts that fall in/around CA · OR · NV · WA, and store one feature per part.
 //
 // This is the atlas's first *polygon* layer. It's a snapshot, not a time series: each
 // run replaces the prior week's polygons (clearFeatures) so nothing stale lingers.
@@ -13,9 +13,9 @@ const URL =
   'https://services5.arcgis.com/0OTVzJS4K09zlixn/arcgis/rest/services/USDM_current/FeatureServer/0/query' +
   '?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 
-// California-ish bounding box [west, south, east, north]. Used to drop polygon parts that
-// belong to neighboring states — a cheap clip that keeps the map about California.
-const CA_BBOX = [-124.6, 32.4, -114.0, 42.1];
+// West-Coast-ish bounding box [west, south, east, north] (CA · OR · NV · WA). Used to drop
+// polygon parts from the rest of the country — a cheap clip that keeps the map regional.
+const WEST_BBOX = [-124.9, 32.4, -114.0, 49.05];
 
 const DM = {
   0: 'D0 — Abnormally Dry',
@@ -27,9 +27,9 @@ const DM = {
 
 export default {
   id: ID,
-  title: 'US Drought Monitor (California)',
+  title: 'US Drought Monitor (West)',
   layer: LAYER,
-  description: 'Weekly drought severity (D0–D4) — current conditions, clipped to California.',
+  description: 'Weekly drought severity (D0–D4) — current conditions, clipped to CA · OR · NV · WA.',
   style: { color: '#e6550d', cluster: false, kind: 'fill' },
   // Keep the export lean: only the category + valid date travel to the browser.
   exportProps: ['dm', 'dm_label', 'valid_date'],
@@ -51,7 +51,7 @@ export default {
       validDate ??= normDate(f.properties?.ValidStart ?? f.properties?.MapDate);
 
       for (const poly of explode(f.geometry)) {
-        if (!intersectsCA(poly)) continue; // drop neighboring-state parts
+        if (!intersectsWest(poly)) continue; // drop out-of-region parts
         store.feature({
           source: ID, layer: LAYER, external_id: `${dm}-${part++}`,
           name: DM[dm] ?? `D${dm}`,
@@ -62,7 +62,7 @@ export default {
       }
     }
 
-    log.info(`drought: ${kept} CA polygons across D0–D4 (valid ${validDate ?? 'unknown'})`);
+    log.info(`drought: ${kept} West Coast polygons across D0–D4 (valid ${validDate ?? 'unknown'})`);
     return { cursor: validDate, stats: { polygons: kept, valid: validDate } };
   },
 };
@@ -77,15 +77,15 @@ function explode(geom) {
   return [];
 }
 
-// True if a polygon's bounding box overlaps California's. Outer ring is coords[0].
-function intersectsCA(poly) {
+// True if a polygon's bounding box overlaps the West Coast footprint. Outer ring is coords[0].
+function intersectsWest(poly) {
   const ring = poly[0];
   let west = Infinity, south = Infinity, east = -Infinity, north = -Infinity;
   for (const [x, y] of ring) {
     if (x < west) west = x; if (x > east) east = x;
     if (y < south) south = y; if (y > north) north = y;
   }
-  const [cw, cs, ce, cn] = CA_BBOX;
+  const [cw, cs, ce, cn] = WEST_BBOX;
   return !(east < cw || west > ce || north < cs || south > cn);
 }
 

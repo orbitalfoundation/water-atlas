@@ -31,7 +31,8 @@ const BASEMAP_STYLE = {
   layers: [{ id: 'carto', type: 'raster', source: 'carto' }],
 };
 
-export function createMap(container, { center = [-119.4, 37.4], zoom = 5.4 } = {}) {
+// Default frame: the whole West Coast footprint (San Diego to the Canadian border).
+export function createMap(container, { center = [-119.8, 40.8], zoom = 4.8 } = {}) {
   const map = new maplibregl.Map({ container, style: BASEMAP_STYLE, center, zoom });
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
   map.addControl(new maplibregl.ScaleControl({ unit: 'imperial' }));
@@ -164,6 +165,7 @@ const RIGHTS_AGENCY = {
   'ca-water-rights': 'eWRIMS · CA State Water Board',
   'or-water-rights': 'OWRD · Oregon',
   'nv-water-rights': 'NDWR · Nevada',
+  'wa-water-rights': 'Ecology · Washington',
 };
 
 function cursorPointer(map, layerId) {
@@ -233,6 +235,7 @@ function popupHtml(entry, p) {
   const rows = [
     ['Owner', p.owner],
     ['Use', p.use],
+    ['Type', p.point_type],
     ['Status', p.status],
     ['Priority', p.priority],
     hasVolume && p.acre_feet != null && p.rate_cfs != null ? ['Rate', `${p.rate_cfs} cfs`] : null,
