@@ -121,6 +121,38 @@ Re-exports GeoJSON, builds, and rsyncs `site/dist/`. Verify at
 
 ---
 
+## Continuous deployment from GitHub (optional, one time)
+
+Instead of running `deploy/deploy.sh` by hand, the VM can watch GitHub and
+redeploy itself — pushing to `main` becomes the deploy:
+
+```sh
+deploy/setup-autodeploy.sh water-atlas
+```
+
+This installs Node 22 on the VM, seeds it with your local `data/water.db`
+(gitignored, so the clone can't provide it), uploads
+[autodeploy.sh](autodeploy.sh), and enables a systemd timer that polls
+`git ls-remote` on the public repo every ~2 minutes. When the `main` SHA moves,
+the VM pulls, runs `npm run export` + `npm --prefix site run build`, and rsyncs
+`site/dist/` into `/srv/site` (Caddy serves the new files immediately). No
+tokens or webhooks needed — the repo is public and the poll is outbound-only.
+
+> **Note:** running the *installer* is itself a deploy — it builds and ships
+> current `main` immediately.
+
+Watch it / check on it:
+
+```sh
+ssh exedev@water-atlas.exe.xyz journalctl -u water-atlas-autodeploy -f
+ssh exedev@water-atlas.exe.xyz cat /srv/autodeploy/deployed-sha
+```
+
+Caveats: only `main` triggers; data freshness still depends on the seeded
+`water.db` (a future on-VM timer could re-run `npm run aggregate -- --all`
+before rebuilding); `deploy/deploy.sh` still works as a manual override, but
+the next push to `main` overwrites whatever it shipped.
+
 ## Custom domain (optional, one time)
 
 DNS via Cloudflare → add **DNS-only (grey-cloud, NOT proxied)** CNAMEs for the
@@ -141,7 +173,9 @@ then requests get `421 Misdirected Request`. Status: `ssh exe.dev domain ls wate
 
 | Task                   | Command                                       |
 | ---------------------- | --------------------------------------------- |
-| Ship an update         | `deploy/deploy.sh water-atlas`                |
+| Ship an update         | push to `main` (with auto-deploy installed) or `deploy/deploy.sh water-atlas` |
+| Install auto-deploy    | `deploy/setup-autodeploy.sh water-atlas`      |
+| Auto-deploy logs       | `ssh exedev@water-atlas.exe.xyz journalctl -u water-atlas-autodeploy -f` |
 | Restart the web server | `ssh water-atlas.exe.xyz 'docker restart water-atlas'` |
 | Tail server logs       | `ssh water-atlas.exe.xyz 'docker logs -f water-atlas'`  |
 | VM resource usage      | `ssh exe.dev stat water-atlas`                |

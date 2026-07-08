@@ -73,6 +73,13 @@ If gateway SSH also hangs for you, use the dashboard: `ssh exe.dev browser`
 HTTP proxy public. A **private** VM answers the public URL with a `307 →
 /__exe.dev/login` redirect; once public it serves the site.
 
+## Optional: continuous deployment
+
+`deploy/setup-autodeploy.sh water-atlas` installs an on-VM systemd timer that
+polls GitHub `main` every ~2 minutes and rebuilds + redeploys on change (see
+[README.md](README.md) § Continuous deployment). Once installed, pushing to
+`main` is the deploy; the steps above remain for provisioning and manual pushes.
+
 ## Verify
 
 ```sh
