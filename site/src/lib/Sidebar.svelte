@@ -27,8 +27,8 @@
 
   <ul class="layers">
     {#each layers as layer, i (layer.layer)}
-      {@const group = layer.kind === 'gauge' || layer.kind === 'reservoir' ? 'wet' : layer.kind === 'right' ? 'paper' : 'conditions'}
-      {@const prevGroup = i > 0 ? (layers[i-1].kind === 'gauge' || layers[i-1].kind === 'reservoir' ? 'wet' : layers[i-1].kind === 'right' ? 'paper' : 'conditions') : ''}
+      {@const group = layer.kind === 'line' || layer.kind === 'gauge' || layer.kind === 'reservoir' ? 'wet' : layer.kind === 'right' ? 'paper' : 'conditions'}
+      {@const prevGroup = i > 0 ? (layers[i-1].kind === 'line' || layers[i-1].kind === 'gauge' || layers[i-1].kind === 'reservoir' ? 'wet' : layers[i-1].kind === 'right' ? 'paper' : 'conditions') : ''}
       {#if group !== prevGroup}
         <li class="layer-group">{group === 'wet' ? 'Wet water' : group === 'paper' ? 'Paper water' : 'Conditions'}</li>
       {/if}
@@ -61,6 +61,7 @@
   </ul>
 
   <p class="legend">
+    <strong>Rivers</strong> are drawn wider as they gather size on their way down from the mountains.
     Reservoirs are colored by <strong>% full</strong> (red → green) and sized by storage.
     The <strong>drought</strong> wash runs yellow (dry) → dark red (exceptional).
     <strong>Oregon</strong> &amp; <strong>Nevada</strong> water rights are off by default — toggle
@@ -72,7 +73,7 @@
     <button class="about" onclick={onFaq}>FAQ</button>
   </div>
   <footer>
-    Public APIs: USGS · CDEC · eWRIMS<br />
+    Public APIs: USGS · CDEC · eWRIMS · NHDPlus<br />
     <a href="https://github.com/orbitalfoundation/water-atlas" target="_blank" rel="noopener">Source</a> ·
     <a href="https://open-cubed.exe.xyz/" target="_blank" rel="noopener">Open-Cubed</a>
   </footer>

@@ -3,8 +3,11 @@
 import maplibregl from 'maplibre-gl';
 import { fmtAf, fmtCfs, fmtPct, fmtFlowLabel } from './format.js';
 
-// Draw order, bottom -> top (drought wash at the bottom, then dense points, big reservoirs on top).
-export const KIND_ORDER = ['gauge', 'reservoir', 'right', 'fill'];
+// Sidebar display order: wet water first, then paper water, then conditions.
+export const KIND_ORDER = ['line', 'gauge', 'reservoir', 'right', 'fill'];
+// Map draw order, bottom -> top: the drought wash underneath everything, rivers over it,
+// then dense points on top. (Layers are added in this order; MapLibre draws later adds above.)
+export const MAP_ORDER = ['fill', 'line', 'gauge', 'reservoir', 'right'];
 
 // Official US Drought Monitor palette, D0 (abnormally dry) -> D4 (exceptional).
 const DM_COLORS = ['#ffff00', '#fcd37f', '#ffaa00', '#e60000', '#730000'];
@@ -45,6 +48,24 @@ export function addLayerFromManifest(map, entry) {
     clusterRadius: 25,
     clusterMaxZoom: 6,
   });
+
+  if (entry.kind === 'line') {
+    map.addLayer({
+      id: `${entry.layer}-line`, type: 'line', source: srcId,
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: {
+        'line-color': entry.color,
+        'line-opacity': 0.75,
+        // Width follows Strahler order — headwater tributaries thin, trunk rivers thick —
+        // and everything fattens as you zoom in.
+        'line-width': ['interpolate', ['linear'], ['zoom'],
+          5, ['interpolate', ['linear'], ['coalesce', ['get', 'streamorder'], 4], 4, 0.5, 6, 1.4, 9, 3],
+          11, ['interpolate', ['linear'], ['coalesce', ['get', 'streamorder'], 4], 4, 1.5, 6, 4.5, 9, 10]],
+      },
+    });
+    bindPopup(map, `${entry.layer}-line`, entry);
+    return;
+  }
 
   if (entry.kind === 'fill') {
     map.addLayer({
@@ -116,7 +137,7 @@ export function addLayerFromManifest(map, entry) {
 }
 
 export function setLayerVisibility(map, entry, visible) {
-  for (const suffix of ['clusters', 'count', 'point', 'fill', 'outline']) {
+  for (const suffix of ['clusters', 'count', 'point', 'fill', 'outline', 'line']) {
     const id = `${entry.layer}-${suffix}`;
     if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
   }
@@ -159,8 +180,31 @@ function reservoirColor(pct) {
   return '#1a9850';
 }
 
+// NHD feature-type codes -> plain English for the river popup.
+const FTYPE_LABEL = {
+  460: 'Stream / river',
+  336: 'Canal / ditch',
+  558: 'Channel through a lake or reservoir', // ArtificialPath
+  334: 'Connector',
+  428: 'Pipeline',
+  566: 'Coastline',
+};
+
 function popupHtml(entry, p) {
   const kind = entry.kind;
+  if (kind === 'line') {
+    const sqmi = p.totdasqkm != null ? `${Math.round(p.totdasqkm * 0.386102).toLocaleString()} mi²` : null;
+    const rows = [
+      ['Stream order', p.streamorder],
+      ['Drains', sqmi],
+      ['Type', FTYPE_LABEL[p.ftype] ?? p.ftype],
+    ].filter((r) => r[1] != null && r[1] !== '');
+    return `<div class="pop"><h3><span class="pop-dot" style="background:${entry.color}"></span>${esc(p.name || 'Unnamed stream')}</h3>
+      <div class="pop-big">${fmtCfs(p.qe_ma)}</div>
+      <div class="pop-label">mean annual flow</div>
+      <table>${rows.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</table>
+      <small>NHDPlus v2 · USGS / EPA</small></div>`;
+  }
   if (kind === 'fill') {
     const dm = Number(p.dm ?? 0);
     const color = DM_COLORS[dm] ?? '#ccc';

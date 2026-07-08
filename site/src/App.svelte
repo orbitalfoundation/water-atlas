@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { createMap, addLayerFromManifest, setLayerVisibility, KIND_ORDER } from './lib/map.js';
+  import { createMap, addLayerFromManifest, setLayerVisibility, KIND_ORDER, MAP_ORDER } from './lib/map.js';
   import Splash from './lib/Splash.svelte';
   import Sidebar from './lib/Sidebar.svelte';
   import Faq from './lib/Faq.svelte';
@@ -28,7 +28,9 @@
 
     map = createMap(mapEl);
     map.on('load', () => {
-      for (const entry of layers) if (entry.visible) {
+      // Attach in draw order (bottom -> top), independent of the sidebar's display order.
+      const drawOrder = [...layers].sort((a, b) => MAP_ORDER.indexOf(a.kind) - MAP_ORDER.indexOf(b.kind));
+      for (const entry of drawOrder) if (entry.visible) {
         addLayerFromManifest(map, entry);
         added.add(entry.layer);
       }
