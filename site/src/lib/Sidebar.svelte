@@ -13,14 +13,32 @@
     gradient: 'linear-gradient(90deg, #d73027 0%, #fc8d59 30%, #fee08b 50%, #91cf60 75%, #1a9850 100%)',
     left: 'Empty', right: 'Full',
   };
+
+  // Collapse the panel so it stops covering the map. Starts collapsed on narrow
+  // (mobile) screens, where the full panel would otherwise obscure most of the view.
+  let collapsed = $state(
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches
+  );
 </script>
 
-<aside class="panel">
+<aside class="panel" class:collapsed>
   <header>
-    <h1>Water Atlas</h1>
-    <p class="sub">The western waters · live data</p>
+    <div class="titlebar">
+      <h1>Water Atlas</h1>
+      <button
+        class="collapse-btn"
+        onclick={() => (collapsed = !collapsed)}
+        aria-expanded={!collapsed}
+        aria-label={collapsed ? 'Show layers & legend' : 'Hide layers & legend'}
+        title={collapsed ? 'Show layers & legend' : 'Hide layers & legend'}
+      >{collapsed ? '☰' : '×'}</button>
+    </div>
+    {#if !collapsed}
+      <p class="sub">The western waters · live data</p>
+    {/if}
   </header>
 
+  {#if !collapsed}
   {#if loading}
     <p class="loading">Loading layers…</p>
   {/if}
@@ -77,4 +95,5 @@
     <a href="https://github.com/orbitalfoundation/water-atlas" target="_blank" rel="noopener">Source</a> ·
     <a href="https://open-cubed.exe.xyz/" target="_blank" rel="noopener">Open-Cubed</a>
   </footer>
+  {/if}
 </aside>

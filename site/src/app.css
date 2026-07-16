@@ -25,9 +25,24 @@ html, body, #app { height: 100%; margin: 0; }
   border-radius: 12px;
   box-shadow: 0 6px 24px rgba(16, 33, 43, 0.18);
   padding: 1.2rem 1.4rem;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
 }
+.panel .titlebar { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
 .panel header h1 { margin: 0; font-size: 1.25rem; letter-spacing: -0.01em; }
 .panel .sub { margin: 0.1rem 0 0.8rem; color: var(--muted); font-size: var(--text-sm); }
+
+/* Collapse toggle — lets the panel get out of the way (esp. on mobile). */
+.panel .collapse-btn {
+  flex: none; width: 2rem; height: 2rem; margin: -0.2rem -0.4rem -0.2rem 0;
+  display: grid; place-items: center; cursor: pointer;
+  background: transparent; border: 0; border-radius: 8px;
+  color: var(--muted); font-size: 1.4rem; line-height: 1;
+}
+.panel .collapse-btn:hover { background: var(--bg-subtle); color: var(--ink); }
+.panel.collapsed { padding: 0.5rem 0.6rem; }
+.panel.collapsed header h1 { font-size: 1rem; }
+.panel.collapsed .collapse-btn { font-size: 1.15rem; }
 .panel .loading { color: var(--muted); font-size: 0.85rem; }
 
 .layers { list-style: none; margin: 0; padding: 0; }
